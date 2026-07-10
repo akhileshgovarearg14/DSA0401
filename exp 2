@@ -1,0 +1,28 @@
+import numpy as np
+
+# Sales data for the past month (30 days)
+sales = np.array([
+    1200, 1500, 1800, 1700, 1600,
+    2000, 2100, 1900, 2200, 2300,
+    2500, 2400, 2600, 2700, 2800,
+    3000, 2900, 3100, 3200, 3300,
+    3400, 3500, 3600, 3700, 3800,
+    3900, 4000, 4100, 4200, 4300
+])
+
+# Total sales
+total_sales = np.sum(sales)
+
+# Average sales
+average_sales = np.mean(sales)
+
+# Maximum sales
+maximum_sales = np.max(sales)
+
+# Minimum sales
+minimum_sales = np.min(sales)
+
+print("Total Sales:", total_sales)
+print("Average Sales:", average_sales)
+print("Maximum Sales:", maximum_sales)
+print("Minimum Sales:", minimum_sales)
