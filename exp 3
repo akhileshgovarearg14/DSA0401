@@ -1,0 +1,18 @@
+import numpy as np
+
+# Load the CSV file
+# Replace 'house_data.csv' with your actual CSV file name
+house_data = np.genfromtxt(r"E:\DSA 0401\EXP.csv", delimiter='\t', skip_header=1)
+
+# Assuming:
+# Column 0 = Number of Bedrooms
+# Column 2 = Sale Price
+
+# Filter houses with more than 4 bedrooms
+filtered_houses = house_data[house_data[:, 0] > 4]
+
+# Calculate the average sale price
+average_sale_price = np.mean(filtered_houses[:, 2])
+
+# Display the result
+print("Average Sale Price of Houses with More Than 4 Bedrooms:", average_sale_price)
