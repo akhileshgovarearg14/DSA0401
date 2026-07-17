@@ -1,0 +1,33 @@
+# Import required libraries
+import matplotlib.pyplot as plt
+
+# Monthly sales data
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+sales = [25000, 32000, 28000, 35000, 40000, 45000]
+
+# ---------------------------------------
+# 1. Line Plot of Monthly Sales Data
+# ---------------------------------------
+
+plt.figure(figsize=(8,5))
+plt.plot(months, sales, marker='o', linewidth=2)
+
+plt.title("Monthly Sales Data - Line Plot")
+plt.xlabel("Months")
+plt.ylabel("Sales")
+plt.grid(True)
+
+plt.show()
+
+# ---------------------------------------
+# 2. Bar Plot of Monthly Sales Data
+# ---------------------------------------
+
+plt.figure(figsize=(8,5))
+plt.bar(months, sales)
+
+plt.title("Monthly Sales Data - Bar Plot")
+plt.xlabel("Months")
+plt.ylabel("Sales")
+
+plt.show()
