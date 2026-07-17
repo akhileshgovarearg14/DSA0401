@@ -1,0 +1,55 @@
+# Import Pandas
+import pandas as pd
+
+# Create a sample sales DataFrame
+data = {
+    "Order_ID": [1,2,3,4,5,6,7,8,9,10],
+    "Product_Name": [
+        "Laptop",
+        "Mouse",
+        "Keyboard",
+        "Laptop",
+        "Mouse",
+        "Monitor",
+        "Laptop",
+        "Keyboard",
+        "Mouse",
+        "Monitor"
+    ],
+    "Quantity_Sold": [5, 10, 7, 8, 6, 4, 9, 5, 3, 8],
+    "Order_Date": [
+        "2024-06-01",
+        "2024-06-03",
+        "2024-06-05",
+        "2024-06-08",
+        "2024-06-10",
+        "2024-06-12",
+        "2024-06-15",
+        "2024-06-18",
+        "2024-06-20",
+        "2024-06-25"
+    ]
+}
+
+# Create DataFrame
+sales_data = pd.DataFrame(data)
+
+# Convert Order_Date to datetime
+sales_data["Order_Date"] = pd.to_datetime(sales_data["Order_Date"])
+
+# Display the sales data
+print("Sales Data:\n")
+print(sales_data)
+
+# ----------------------------------------------------
+# Find the Top 5 Products Sold the Most
+# ----------------------------------------------------
+top_5_products = (
+    sales_data.groupby("Product_Name")["Quantity_Sold"]
+    .sum()
+    .sort_values(ascending=False)
+    .head(5)
+)
+
+print("\nTop 5 Products Sold the Most:\n")
+print(top_5_products)
