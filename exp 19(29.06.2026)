@@ -1,0 +1,19 @@
+import string
+reviews = [
+    "Good product and good quality",
+    "Excellent quality product",
+    "Good service and fast delivery"
+]
+text = " ".join(reviews).lower()
+for ch in string.punctuation:
+    text = text.replace(ch,"")
+words = text.split()
+frequency = {}
+for word in words:
+    if word in frequency:
+        frequency[word] += 1
+    else:
+        frequency[word] = 1
+print("Word Frequency Distribution")
+for word,count in frequency.items():
+    print(word,"=",count)
