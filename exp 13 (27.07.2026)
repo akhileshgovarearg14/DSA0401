@@ -1,0 +1,13 @@
+import pandas as pd
+import numpy as np
+stock_data = pd.read_csv("stock.csv")
+print("Stock Data")
+print(stock_data)
+mean_price = np.mean(stock_data["Close"])
+std_dev = np.std(stock_data["Close"])
+print("\nAverage Closing Price =", mean_price)
+print("Standard Deviation =", std_dev)
+if std_dev > 3:
+    print("Stock prices show high variability.")
+else:
+    print("Stock prices are relatively stable.")
