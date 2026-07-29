@@ -1,0 +1,27 @@
+import numpy as np
+temperature = {
+    "Chennai":[34,35,36,35,34],
+    "Bangalore":[27,28,27,29,28],
+    "Hyderabad":[31,34,36,35,37]
+}
+highest_range = 0
+highest_city = ""
+lowest_std = float('inf')
+consistent_city = ""
+for city, temp in temperature.items():
+    temp = np.array(temp)
+    mean = np.mean(temp)
+    std = np.std(temp)
+    temp_range = np.max(temp) - np.min(temp)
+    print("\nCity :", city)
+    print("Mean =", mean)
+    print("Standard Deviation =", std)
+    print("Range =", temp_range)
+    if temp_range > highest_range:
+        highest_range = temp_range
+        highest_city = city
+    if std < lowest_std:
+        lowest_std = std
+        consistent_city = city
+print("\nCity with Highest Temperature Range =", highest_city)
+print("Most Consistent City =", consistent_city)
