@@ -1,0 +1,9 @@
+import pandas as pd
+sales_data = pd.DataFrame({
+    "Customer_Age":[21,22,21,23,24,22,21,25,24,23]
+})
+print("Customer Ages")
+print(sales_data)
+frequency = sales_data["Customer_Age"].value_counts()
+print("\nFrequency Distribution")
+print(frequency)
