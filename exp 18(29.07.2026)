@@ -1,0 +1,9 @@
+import pandas as pd
+likes_data = pd.DataFrame({
+    "Likes":[100,120,150,100,200,150,120,100,180,150]
+})
+print("Likes Data")
+print(likes_data)
+frequency = likes_data["Likes"].value_counts()
+print("\nFrequency Distribution")
+print(frequency)
