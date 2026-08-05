@@ -1,0 +1,181 @@
+# Retail Sales Dataset - EDA
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Dataset
+df = pd.read_excel("grocery management.xlsx")
+
+# Display First 5 Records
+print("First 5 Records")
+print(df.head())
+
+# Dataset Information
+
+print("\nDataset Information")
+print(df.info())
+
+
+# Missing Values
+print("\nMissing Values")
+print(df.isnull().sum())
+
+
+# Statistical Summary
+
+print("\nStatistical Summary")
+print(df.describe())
+
+
+# Duplicate Records
+
+print("\nDuplicate Records:", df.duplicated().sum())
+
+
+# Category Distribution
+
+print("\nCategory Count")
+print(df["Category"].value_counts())
+
+plt.figure(figsize=(8,5))
+df["Category"].value_counts().plot(kind="bar")
+plt.title("Products by Category")
+plt.xlabel("Category")
+plt.ylabel("Count")
+plt.xticks(rotation=45)
+plt.show()
+
+
+# Price Distribution
+
+plt.figure(figsize=(6,4))
+plt.hist(df["Price"], bins=10)
+plt.title("Price Distribution")
+plt.xlabel("Price")
+plt.ylabel("Frequency")
+plt.show()
+
+# -------------------------------------
+# Quantity Sold Distribution
+# -------------------------------------
+plt.figure(figsize=(6,4))
+plt.hist(df["Quantity_Sold"], bins=10)
+plt.title("Quantity Sold Distribution")
+plt.xlabel("Quantity Sold")
+plt.ylabel("Frequency")
+plt.show()
+
+
+# Discount Distribution
+
+plt.figure(figsize=(6,4))
+plt.hist(df["Discount"], bins=10)
+plt.title("Discount Distribution")
+plt.xlabel("Discount")
+plt.ylabel("Frequency")
+plt.show()
+
+
+# Revenue Distribution
+
+plt.figure(figsize=(6,4))
+plt.hist(df["Revenue"], bins=10)
+plt.title("Revenue Distribution")
+plt.xlabel("Revenue")
+plt.ylabel("Frequency")
+plt.show()
+
+print("\nAverage Sales by Category")
+
+category_sales = df.groupby("Category")[["Quantity_Sold","Revenue"]].mean()
+
+print(category_sales)
+
+category_sales.plot(kind="bar", figsize=(8,5))
+plt.title("Average Quantity Sold and Revenue by Category")
+plt.ylabel("Average Value")
+plt.xticks(rotation=45)
+plt.show()
+
+revenue = df.groupby("Category")["Revenue"].sum().sort_values(ascending=False)
+
+print("\nTotal Revenue by Category")
+print(revenue)
+
+plt.figure(figsize=(8,5))
+revenue.plot(kind="bar")
+plt.title("Total Revenue by Category")
+plt.xlabel("Category")
+plt.ylabel("Revenue")
+plt.xticks(rotation=45)
+plt.show()
+
+if "Product_Name" in df.columns:
+
+    top_products = df.groupby("Product_Name")["Quantity_Sold"].sum().sort_values(ascending=False).head(10)
+
+    print("\nTop 10 High Selling Products")
+    print(top_products)
+
+    plt.figure(figsize=(10,5))
+    top_products.plot(kind="bar")
+    plt.title("Top 10 High Selling Products")
+    plt.xlabel("Product")
+    plt.ylabel("Quantity Sold")
+    plt.xticks(rotation=45)
+    plt.show()
+
+# Correlation Matrix
+corr = df[["Price","Quantity_Sold","Discount","Revenue"]].corr()
+
+print("\nCorrelation Matrix")
+print(corr)
+
+plt.figure(figsize=(6,5))
+plt.imshow(corr, cmap="coolwarm")
+plt.colorbar()
+
+plt.xticks(range(len(corr.columns)), corr.columns, rotation=45)
+plt.yticks(range(len(corr.columns)), corr.columns)
+
+plt.title("Correlation Matrix")
+plt.show()
+
+
+plt.figure(figsize=(6,4))
+plt.scatter(df["Price"], df["Revenue"])
+plt.xlabel("Price")
+plt.ylabel("Revenue")
+plt.title("Price vs Revenue")
+plt.show()
+
+plt.figure(figsize=(6,4))
+plt.scatter(df["Discount"], df["Revenue"])
+plt.xlabel("Discount")
+plt.ylabel("Revenue")
+plt.title("Discount vs Revenue")
+plt.show()
+
+
+# Boxplots
+plt.figure(figsize=(6,4))
+plt.boxplot(df["Price"])
+plt.title("Price Boxplot")
+plt.show()
+
+plt.figure(figsize=(6,4))
+plt.boxplot(df["Quantity_Sold"])
+plt.title("Quantity Sold Boxplot")
+plt.show()
+
+plt.figure(figsize=(6,4))
+plt.boxplot(df["Discount"])
+plt.title("Discount Boxplot")
+plt.show()
+
+plt.figure(figsize=(6,4))
+plt.boxplot(df["Revenue"])
+plt.title("Revenue Boxplot")
+plt.show()
+
+print("\nEDA Completed Successfully!")
