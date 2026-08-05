@@ -1,0 +1,140 @@
+
+# STEP 1: Install/Import Libraries
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set(style="whitegrid")
+plt.rcParams['figure.figsize'] = (8,5)
+
+
+# STEP 2: Upload the dataset (Colab only)
+
+from google.colab import files
+uploaded = files.upload()   # choose student_data_set__csv.xlsx
+
+# Read the file (works whether it's .xlsx or .csv)
+filename = list(uploaded.keys())[0]
+if filename.endswith('.csv'):
+    df = pd.read_csv(filename)
+else:
+    df = pd.read_excel(filename)
+
+df.head()
+
+
+# STEP 3: Basic Understanding of Data
+
+print("Shape of dataset:", df.shape)
+print("\nColumn Info:")
+df.info()
+
+print("\nStatistical Summary:")
+display(df.describe())
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+print("\nResult Value Counts:")
+print(df['Result'].value_counts())
+
+
+# STEP 4: Univariate Analysis
+
+
+# Distribution of Attendance
+plt.figure()
+sns.histplot(df['Attendance'], kde=True, bins=10, color='steelblue')
+plt.title('Distribution of Attendance')
+plt.show()
+
+# Distribution of Study Hours
+plt.figure()
+sns.histplot(df['Study_Hours'], kde=True, bins=8, color='seagreen')
+plt.title('Distribution of Study Hours')
+plt.show()
+
+# Distribution of Internal Marks
+plt.figure()
+sns.histplot(df['Internal_Marks'], kde=True, bins=10, color='indianred')
+plt.title('Distribution of Internal Marks')
+plt.show()
+
+# Pass/Fail count
+plt.figure()
+sns.countplot(x='Result', data=df, palette='Set2')
+plt.title('Pass vs Fail Count')
+plt.show()
+
+
+# STEP 5: Bivariate Analysis (Feature vs Result)
+
+
+# Attendance vs Result
+plt.figure()
+sns.boxplot(x='Result', y='Attendance', data=df, palette='pastel')
+plt.title('Attendance by Result')
+plt.show()
+
+# Study Hours vs Result
+plt.figure()
+sns.boxplot(x='Result', y='Study_Hours', data=df, palette='pastel')
+plt.title('Study Hours by Result')
+plt.show()
+
+# Internal Marks vs Result
+plt.figure()
+sns.boxplot(x='Result', y='Internal_Marks', data=df, palette='pastel')
+plt.title('Internal Marks by Result')
+plt.show()
+
+
+# STEP 6: Scatter Plots (Relationships between features)
+
+plt.figure()
+sns.scatterplot(x='Attendance', y='Internal_Marks', hue='Result', data=df, s=100, palette='deep')
+plt.title('Attendance vs Internal Marks (colored by Result)')
+plt.show()
+
+plt.figure()
+sns.scatterplot(x='Study_Hours', y='Internal_Marks', hue='Result', data=df, s=100, palette='deep')
+plt.title('Study Hours vs Internal Marks (colored by Result)')
+plt.show()
+
+
+# STEP 7: Correlation Analysis
+
+
+# Correlation matrix (numeric columns only)
+numeric_df = df[['Attendance', 'Study_Hours', 'Internal_Marks']]
+corr = numeric_df.corr()
+
+plt.figure()
+sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap')
+plt.show()
+
+print("Correlation with Internal Marks:")
+print(corr['Internal_Marks'].sort_values(ascending=False))
+
+
+# STEP 8: Pairplot (overall relationships)
+
+sns.pairplot(df, vars=['Attendance', 'Study_Hours', 'Internal_Marks'], hue='Result', palette='husl')
+plt.suptitle('Pairplot of Features by Result', y=1.02)
+plt.show()
+
+
+# STEP 9: Group-wise Mean Comparison
+
+print("Average values grouped by Result:")
+display(df.groupby('Result')[['Attendance', 'Study_Hours', 'Internal_Marks']].mean())
+
+
+means = df.groupby('Result')[['Attendance', 'Study_Hours', 'Internal_Marks']].mean()
+print("\n--- KEY INSIGHTS ---")
+print(f"Average Attendance - Pass: {means.loc['Pass','Attendance']:.1f}%, Fail: {means.loc['Fail','Attendance']:.1f}%")
+print(f"Average Study Hours - Pass: {means.loc['Pass','Study_Hours']:.1f} hrs, Fail: {means.loc['Fail','Study_Hours']:.1f} hrs")
+print(f"Average Internal Marks - Pass: {means.loc['Pass','Internal_Marks']:.1f}, Fail: {means.loc['Fail','Internal_Marks']:.1f}")
