@@ -1,0 +1,190 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+ 
+# Make sure "agriculture_crop_yield.csv" is in the same folder as this
+# script (or, in Google Colab, upload it using the snippet below).
+ 
+# ---- If using Google Colab, uncomment these 2 lines to upload the file ----
+# from google.colab import files
+# uploaded = files.upload()   # choose agriculture_crop_yield.csv when prompted
+ 
+df = pd.read_csv("agriculture_crop_yield.csv")
+ 
+print("=" * 60)
+print("STEP 1: DATASET OVERVIEW")
+print("=" * 60)
+print("\nFirst 5 rows:\n", df.head())
+print("\nShape of dataset (rows, columns):", df.shape)
+print("\nColumn names:", list(df.columns))
+ 
+ 
+print("\n" + "=" * 60)
+print("STEP 2: DATASET INFO")
+print("=" * 60)
+print(df.info())
+ 
+print("\nMissing values in each column:\n", df.isnull().sum())
+print("\nDuplicate rows:", df.duplicated().sum())
+ 
+ 
+
+print("\n" + "=" * 60)
+print("STEP 3: STATISTICAL SUMMARY (Numeric Columns)")
+print("=" * 60)
+print(df.describe())
+ 
+print("\n" + "=" * 60)
+print("STEP 3b: SOIL TYPE VALUE COUNTS")
+print("=" * 60)
+print(df["Soil_Type"].value_counts())
+ 
+ 
+
+print("\n" + "=" * 60)
+print("STEP 4: CORRELATION MATRIX (Numeric Columns)")
+print("=" * 60)
+numeric_cols = ["Rainfall_mm", "Temperature", "Fertilizer_kg", "Crop_Yield_kg"]
+corr_matrix = df[numeric_cols].corr()
+print(corr_matrix)
+ 
+print("\nCorrelation of each factor with Crop_Yield_kg:")
+print(corr_matrix["Crop_Yield_kg"].sort_values(ascending=False))
+ 
+ 
+
+print("\n" + "=" * 60)
+print("STEP 5: AVERAGE CROP YIELD BY SOIL TYPE")
+print("=" * 60)
+soil_yield_avg = df.groupby("Soil_Type")["Crop_Yield_kg"].mean().sort_values(ascending=False)
+print(soil_yield_avg)
+ 
+ 
+
+# ---- 6.1 BAR GRAPH: Average Crop Yield by Soil Type ----
+plt.figure(figsize=(7, 5))
+soil_yield_avg.plot(kind="bar", color=["#4C72B0", "#DD8452", "#55A868"])
+plt.title("Average Crop Yield by Soil Type")
+plt.xlabel("Soil Type")
+plt.ylabel("Average Crop Yield (kg)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.2 BAR GRAPH: Crop Yield for every Farm ----
+plt.figure(figsize=(10, 5))
+plt.bar(df["Farm_ID"], df["Crop_Yield_kg"], color="seagreen")
+plt.title("Crop Yield per Farm")
+plt.xlabel("Farm ID")
+plt.ylabel("Crop Yield (kg)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.3 BAR GRAPH: Correlation of each factor with Crop Yield ----
+corr_with_yield = corr_matrix["Crop_Yield_kg"].drop("Crop_Yield_kg")
+plt.figure(figsize=(7, 5))
+corr_with_yield.plot(kind="bar", color="darkorange")
+plt.title("Correlation of Factors with Crop Yield")
+plt.xlabel("Factor")
+plt.ylabel("Correlation Coefficient")
+plt.axhline(0, color="black", linewidth=0.8)
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.4 BAR GRAPH: Binned Rainfall vs Average Crop Yield ----
+# pd.cut() is used to convert the continuous Rainfall_mm column
+# into ranges (bins), then the average yield per bin is plotted.
+rainfall_bins = pd.cut(df["Rainfall_mm"], bins=[500, 650, 800, 950],
+                        labels=["500-650", "650-800", "800-950"])
+rainfall_yield_avg = df.groupby(rainfall_bins)["Crop_Yield_kg"].mean()
+ 
+plt.figure(figsize=(7, 5))
+rainfall_yield_avg.plot(kind="bar", color="steelblue")
+plt.title("Average Crop Yield by Rainfall Range")
+plt.xlabel("Rainfall Range (mm)")
+plt.ylabel("Average Crop Yield (kg)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.5 BAR GRAPH: Binned Fertilizer Usage vs Average Crop Yield ----
+fertilizer_bins = pd.cut(df["Fertilizer_kg"], bins=[40, 50, 60, 70, 80],
+                          labels=["40-50", "50-60", "60-70", "70-80"])
+fertilizer_yield_avg = df.groupby(fertilizer_bins)["Crop_Yield_kg"].mean()
+ 
+plt.figure(figsize=(7, 5))
+fertilizer_yield_avg.plot(kind="bar", color="mediumpurple")
+plt.title("Average Crop Yield by Fertilizer Usage Range")
+plt.xlabel("Fertilizer Usage Range (kg)")
+plt.ylabel("Average Crop Yield (kg)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.6 LINE GRAPH: Rainfall vs Crop Yield trend ----
+# Sorted by Rainfall so the line shows a clear increasing/decreasing trend.
+df_sorted_rain = df.sort_values("Rainfall_mm")
+plt.figure(figsize=(8, 5))
+plt.plot(df_sorted_rain["Rainfall_mm"], df_sorted_rain["Crop_Yield_kg"],
+         marker="o", color="royalblue")
+plt.title("Trend: Rainfall vs Crop Yield")
+plt.xlabel("Rainfall (mm)")
+plt.ylabel("Crop Yield (kg)")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.7 LINE GRAPH: Temperature vs Crop Yield trend ----
+df_sorted_temp = df.sort_values("Temperature")
+plt.figure(figsize=(8, 5))
+plt.plot(df_sorted_temp["Temperature"], df_sorted_temp["Crop_Yield_kg"],
+         marker="o", color="crimson")
+plt.title("Trend: Temperature vs Crop Yield")
+plt.xlabel("Temperature (°C)")
+plt.ylabel("Crop Yield (kg)")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.8 LINE GRAPH: Fertilizer Usage vs Crop Yield trend ----
+df_sorted_fert = df.sort_values("Fertilizer_kg")
+plt.figure(figsize=(8, 5))
+plt.plot(df_sorted_fert["Fertilizer_kg"], df_sorted_fert["Crop_Yield_kg"],
+         marker="o", color="darkgreen")
+plt.title("Trend: Fertilizer Usage vs Crop Yield")
+plt.xlabel("Fertilizer Usage (kg)")
+plt.ylabel("Crop Yield (kg)")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+ 
+# ---- 6.9 LINE GRAPH: Crop Yield across all farms (Farm_ID order) ----
+plt.figure(figsize=(10, 5))
+plt.plot(df["Farm_ID"], df["Crop_Yield_kg"], marker="o",
+         linestyle="-", color="teal")
+plt.title("Crop Yield Trend Across Farms (F01 to F20)")
+plt.xlabel("Farm ID")
+plt.ylabel("Crop Yield (kg)")
+plt.xticks(rotation=45)
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+ 
+ 
+
+print("\n" + "=" * 60)
+print("STEP 7: KEY FINDINGS")
+print("=" * 60)
+strongest_factor = corr_with_yield.abs().idxmax()
+print(f"1. The factor with the strongest correlation to Crop Yield is: "
+      f"{strongest_factor} (correlation = {corr_with_yield[strongest_factor]:.2f})")
+print(f"2. Soil type with the highest average yield: "
+      f"{soil_yield_avg.idxmax()} ({soil_yield_avg.max():.1f} kg)")
+print(f"3. Soil type with the lowest average yield: "
+      f"{soil_yield_avg.idxmin()} ({soil_yield_avg.min():.1f} kg)")
+print(f"4. Highest rainfall range yield: "
+      f"{rainfall_yield_avg.idxmax()} mm -> {rainfall_yield_avg.max():.1f} kg")
+print(f"5. Highest fertilizer usage range yield: "
+      f"{fertilizer_yield_avg.idxmax()} kg -> {fertilizer_yield_avg.max():.1f} kg")
+ 
