@@ -1,0 +1,164 @@
+
+# Banking Loan Approval Dataset - EDA
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Dataset
+df = pd.read_excel("bank management.xlsx")
+
+# Display First 5 Records
+
+print("First 5 Records")
+print(df.head())
+
+
+# Dataset Information
+print("\nDataset Information")
+print(df.info())
+
+# Check Missing Values
+
+print("\nMissing Values")
+print(df.isnull().sum())
+
+
+# Statistical Summary
+
+print("\nStatistical Summary")
+print(df.describe())
+
+
+# Check Duplicate Records
+
+print("\nDuplicate Records:", df.duplicated().sum())
+
+
+# Approval Status Distribution (Bar Chart)
+
+print("\nApproval Status Count")
+print(df["Loan_Status"].value_counts())
+
+plt.figure(figsize=(6,4))
+df["Loan_Status"].value_counts().plot(kind="bar")
+plt.title("Loan Approval Status")
+plt.xlabel("Approval Status")
+plt.ylabel("Number of Applications")
+plt.tight_layout()
+plt.show()
+
+# Employment Type Distribution (Bar Chart)
+print("\nEmployment Type Count")
+print(df["Employment_Type"].value_counts())
+
+plt.figure(figsize=(6,4))
+df["Employment_Type"].value_counts().plot(kind="bar")
+plt.title("Employment Type Distribution")
+plt.xlabel("Employment Type")
+plt.ylabel("Count")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+# Income Distribution (Bar Chart using bins)
+income_bins = pd.cut(df["Income"], bins=10)
+income_counts = income_bins.value_counts().sort_index()
+
+print("\nIncome Distribution (Binned)")
+print(income_counts)
+
+plt.figure(figsize=(7,4))
+income_counts.plot(kind="bar")
+plt.title("Income Distribution")
+plt.xlabel("Income Range")
+plt.ylabel("Frequency")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
+
+
+# Credit Score Distribution (Bar Chart using bins)
+credit_bins = pd.cut(df["Credit_Score"], bins=10)
+credit_counts = credit_bins.value_counts().sort_index()
+
+print("\nCredit Score Distribution (Binned)")
+print(credit_counts)
+
+plt.figure(figsize=(7,4))
+credit_counts.plot(kind="bar")
+plt.title("Credit Score Distribution")
+plt.xlabel("Credit Score Range")
+plt.ylabel("Frequency")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
+
+# Loan Amount Distribution (Bar Chart using bins)
+
+loan_bins = pd.cut(df["Loan_Amount"], bins=10)
+loan_counts = loan_bins.value_counts().sort_index()
+
+print("\nLoan Amount Distribution (Binned)")
+print(loan_counts)
+
+plt.figure(figsize=(7,4))
+loan_counts.plot(kind="bar")
+plt.title("Loan Amount Distribution")
+plt.xlabel("Loan Amount Range")
+plt.ylabel("Frequency")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
+
+
+# Average Values by Approval Status (Bar Chart)
+
+approval = df.groupby("Loan_Status")[["Income","Credit_Score","Loan_Amount"]].mean()
+
+print("\nAverage Values by Approval Status")
+print(approval)
+
+approval.plot(kind="bar", figsize=(8,5))
+plt.title("Average Income, Credit Score and Loan Amount")
+plt.ylabel("Average Value")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+
+
+# Loan Approval by Employment Type (Bar Chart)
+employment = pd.crosstab(df["Employment_Type"], df["Loan_Status"])
+
+print("\nLoan Approval by Employment Type")
+print(employment)
+
+employment.plot(kind="bar", figsize=(8,5))
+plt.title("Loan Approval by Employment Type")
+plt.xlabel("Employment Type")
+plt.ylabel("Number of Applicants")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+# Correlation Summary (Bar Chart instead of heatmap)
+
+corr = df[["Income","Credit_Score","Loan_Amount"]].corr()
+
+print("\nCorrelation Matrix")
+print(corr)
+
+# Show correlation of Loan_Amount with Income and Credit_Score as a bar chart
+loan_corr = corr["Loan_Amount"].drop("Loan_Amount")
+
+plt.figure(figsize=(6,4))
+loan_corr.plot(kind="bar")
+plt.title("Correlation of Loan Amount with Income & Credit Score")
+plt.xlabel("Feature")
+plt.ylabel("Correlation Coefficient")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+
+print("\nEDA Completed Successfully!")
