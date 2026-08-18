@@ -1,0 +1,40 @@
+import numpy as np
+
+# Runtime input
+students = int(input("Enter number of students: "))
+subjects_count = 4
+
+subjects = ["Math", "Science", "English", "History"]
+
+# Create matrix
+student_scores = []
+
+print("\nEnter marks for each student:")
+
+for i in range(students):
+    print(f"\nStudent {i + 1}:")
+    scores = []
+
+    for j in range(subjects_count):
+        mark = float(input(f"Enter marks in {subjects[j]}: "))
+        scores.append(mark)
+
+    student_scores.append(scores)
+
+# Convert to NumPy array
+student_scores = np.array(student_scores)
+
+# Calculate average for each subject
+average_scores = np.mean(student_scores, axis=0)
+
+print("\nAverage Score for Each Subject:")
+
+for i in range(subjects_count):
+    print(subjects[i], ":", average_scores[i])
+
+# Find highest average
+highest_index = np.argmax(average_scores)
+
+print("\nSubject with Highest Average Score:")
+print(subjects[highest_index])
+print("Average Score:", average_scores[highest_index])
