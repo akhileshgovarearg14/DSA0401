@@ -1,0 +1,31 @@
+import numpy as np
+
+# Runtime input
+products = 3
+columns = 3
+
+sales_data = []
+
+print("Enter sales data for 3 products:")
+
+for i in range(products):
+    print(f"\nProduct {i + 1}:")
+    row = []
+
+    for j in range(columns):
+        value = float(input(f"Enter value {j + 1}: "))
+        row.append(value)
+
+    sales_data.append(row)
+
+# Convert to NumPy array
+sales_data = np.array(sales_data)
+
+# Average of all values
+average_price = np.mean(sales_data)
+
+print("\nSales Data:")
+print(sales_data)
+
+print("\nAverage Price of All Products Sold:")
+print(average_price)
