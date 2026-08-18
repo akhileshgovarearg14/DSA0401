@@ -1,32 +1,45 @@
-# Item prices and quantities
-prices = [50, 100, 200, 150]
-quantities = [2, 1, 3, 2]
+import numpy as np
 
-# Discount and tax rates
-discount_rate = 10    # 10%
-tax_rate = 5          # 5%
+# Runtime input
+cars = int(input("Enter number of car models: "))
 
-# Calculate subtotal
-subtotal = 0
-for i in range(len(prices)):
-    subtotal = subtotal + (prices[i] * quantities[i])
+fuel_efficiency = []
 
-# Calculate discount
-discount = (discount_rate / 100) * subtotal
+print("\nEnter fuel efficiency (MPG):")
 
-# Amount after discount
-amount_after_discount = subtotal - discount
+for i in range(cars):
+    mpg = float(input(f"Enter MPG for Car Model {i + 1}: "))
+    fuel_efficiency.append(mpg)
 
-# Calculate tax
-tax = (tax_rate / 100) * amount_after_discount
+# Convert to NumPy array
+fuel_efficiency = np.array(fuel_efficiency)
 
-# Final total cost
-total_cost = amount_after_discount + tax
+# Calculate average fuel efficiency
+average_efficiency = np.mean(fuel_efficiency)
 
-# Display results
-print("Subtotal = Rs.", subtotal)
-print("Discount = Rs.", discount)
-print("Amount after Discount = Rs.", amount_after_discount)
-print("Tax = Rs.", tax)
-print("Total Cost = Rs.", total_cost)
+print("\nFuel Efficiency:")
+print(fuel_efficiency)
 
+print("\nAverage Fuel Efficiency:")
+print(average_efficiency, "MPG")
+
+# Select two car models for comparison
+model1 = int(input("\nEnter first car model number: "))
+model2 = int(input("Enter second car model number: "))
+
+# Convert model number to array index
+efficiency1 = fuel_efficiency[model1 - 1]
+efficiency2 = fuel_efficiency[model2 - 1]
+
+# Percentage improvement
+percentage_improvement = ((efficiency2 - efficiency1) /
+                          efficiency1) * 100
+
+print("\nFirst Car Model Efficiency:")
+print(efficiency1, "MPG")
+
+print("Second Car Model Efficiency:")
+print(efficiency2, "MPG")
+
+print("\nPercentage Improvement:")
+print(percentage_improvement, "%")
