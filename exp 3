@@ -1,18 +1,35 @@
 import numpy as np
 
-# Load the CSV file
-# Replace 'house_data.csv' with your actual CSV file name
-house_data = np.genfromtxt(r"E:\DSA 0401\EXP.csv", delimiter='\t', skip_header=1)
+# Runtime input
+houses = int(input("Enter number of houses: "))
 
-# Assuming:
-# Column 0 = Number of Bedrooms
-# Column 2 = Sale Price
+house_data = []
 
-# Filter houses with more than 4 bedrooms
-filtered_houses = house_data[house_data[:, 0] > 4]
+print("\nEnter house details:")
 
-# Calculate the average sale price
-average_sale_price = np.mean(filtered_houses[:, 2])
+for i in range(houses):
+    print(f"\nHouse {i + 1}:")
 
-# Display the result
-print("Average Sale Price of Houses with More Than 4 Bedrooms:", average_sale_price)
+    bedrooms = int(input("Enter number of bedrooms: "))
+    square_feet = float(input("Enter square footage: "))
+    sale_price = float(input("Enter sale price: "))
+
+    house_data.append([bedrooms, square_feet, sale_price])
+
+# Convert to NumPy array
+house_data = np.array(house_data)
+
+# Select houses with more than 4 bedrooms
+selected_houses = house_data[house_data[:, 0] > 4]
+
+print("\nHouses with more than 4 bedrooms:")
+print(selected_houses)
+
+# Calculate average sale price
+if len(selected_houses) > 0:
+    average_price = np.mean(selected_houses[:, 2])
+
+    print("\nAverage Sale Price:")
+    print(average_price)
+else:
+    print("\nNo houses with more than 4 bedrooms.")
